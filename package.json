@@ -1,0 +1,23 @@
+{
+  "name": "task-management-platform",
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "private": true,
+  "packageManager": "npm@10.9.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint"
+  },
+  "devDependencies": {
+    "turbo": "^2.9.16"
+  }
+}

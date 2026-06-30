@@ -9,11 +9,21 @@ RolePermission.init(
     roleId: {
       type: DataTypes.UUID,
       field: 'role_id',
+      allowNull: false,
+      primaryKey: true,
     },
 
     permissionId: {
       type: DataTypes.UUID,
       field: 'permission_id',
+      allowNull: false,
+      primaryKey: true,
+    },
+
+    createdAt: {
+      type: DataTypes.DATE,
+      field: 'created_at',
+      allowNull: false,
     },
   },
   {
@@ -21,6 +31,8 @@ RolePermission.init(
 
     tableName: 'role_permissions',
 
-    timestamps: false,
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: false,
   },
 );

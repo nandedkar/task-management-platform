@@ -8,6 +8,7 @@ const PERMISSION_CODES = [
   'USER_READ',
   'USER_UPDATE',
   'USER_DELETE',
+  'ROLE_READ',
   'ROLE_CREATE',
   'ROLE_UPDATE',
   'ROLE_DELETE',
@@ -33,7 +34,9 @@ module.exports = {
       },
     );
 
-    const existingCodes = new Set(existingPermissions.map((permission) => permission.code));
+    const existingCodes = new Set(
+      existingPermissions.map((permission) => permission.code),
+    );
 
     const permissions = PERMISSION_CODES.map((code) => ({
       id: randomUUID(),

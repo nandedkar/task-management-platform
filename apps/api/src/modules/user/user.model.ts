@@ -14,15 +14,11 @@ export class User extends BaseModel<
   InferAttributes<User>,
   InferCreationAttributes<User>
 > {
-  // declare id: CreationOptional<string>;
   declare firstName: string;
   declare lastName: string;
   declare email: string;
   declare passwordHash: string;
   declare isActive: CreationOptional<boolean>;
-  // declare createdAt: CreationOptional<Date>;
-  // declare updatedAt: CreationOptional<Date>;
-  // declare deletedAt: CreationOptional<Date | null>;
 }
 
 User.init(
@@ -57,7 +53,6 @@ User.init(
       defaultValue: true,
       field: 'is_active',
     },
-    ...auditColumns,
   },
   {
     sequelize,

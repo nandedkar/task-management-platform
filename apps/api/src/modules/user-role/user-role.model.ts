@@ -9,11 +9,19 @@ UserRole.init(
       type: DataTypes.UUID,
       field: 'user_id',
       allowNull: false,
+      primaryKey: true,
     },
 
     roleId: {
       type: DataTypes.UUID,
       field: 'role_id',
+      allowNull: false,
+      primaryKey: true,
+    },
+
+    createdAt: {
+      type: DataTypes.DATE,
+      field: 'created_at',
       allowNull: false,
     },
   },
@@ -22,6 +30,8 @@ UserRole.init(
 
     tableName: 'user_roles',
 
-    timestamps: false,
+    timestamps: true,
+    createdAt: 'created_at',
+    updatedAt: false,
   },
 );

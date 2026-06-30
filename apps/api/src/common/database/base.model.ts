@@ -13,6 +13,4 @@ export abstract class BaseModel<
   declare createdAt: CreationOptional<Date>;
 
   declare updatedAt: CreationOptional<Date>;
-
-  declare deletedAt: CreationOptional<Date | null>;
 }

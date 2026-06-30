@@ -1,37 +1,39 @@
-import dotenv from "dotenv";
-import { existsSync } from "fs";
+import dotenv from 'dotenv';
+import { existsSync } from 'fs';
+import { redisConfig } from './redis.config';
+import { databaseConfig } from './database.config';
+import { appConfig } from './app.config';
 
 dotenv.config();
 
-const isRunningInDocker = existsSync("/.dockerenv");
+const isRunningInDocker = existsSync('/.dockerenv');
 
 function resolveHost(host: string | undefined): string {
   if (!host) {
-    return host ?? "";
+    return host ?? '';
   }
 
-  if (!isRunningInDocker && host === "mysql") {
-    return "localhost";
+  if (!isRunningInDocker && host === 'mysql') {
+    return 'localhost';
   }
 
-  if (!isRunningInDocker && host === "redis") {
-    return "localhost";
+  if (!isRunningInDocker && host === 'redis') {
+    return 'localhost';
   }
 
   return host;
 }
 
 export const env = {
-  nodeEnv: process.env.NODE_ENV,
-  port: Number(process.env.PORT),
+  nodeEnv: appConfig.env,
+  port: Number(appConfig.port),
 
-  dbHost: resolveHost(process.env.DB_HOST),
-  dbPort: Number(process.env.DB_PORT),
+  dbHost: resolveHost(databaseConfig.host),
+  dbPort: Number(databaseConfig.port),
+  dbName: databaseConfig.database,
+  dbUser: databaseConfig.username,
+  dbPassword: databaseConfig.password,
 
-  dbName: process.env.DB_NAME!,
-  dbUser: process.env.DB_USER!,
-  dbPassword: process.env.DB_PASSWORD!,
-
-  redisHost: resolveHost(process.env.REDIS_HOST),
-  redisPort: Number(process.env.REDIS_PORT)
+  redisHost: resolveHost(redisConfig.host),
+  redisPort: Number(redisConfig.port),
 };

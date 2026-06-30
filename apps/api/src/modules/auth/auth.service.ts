@@ -15,11 +15,11 @@ import { RegisterResponseDto } from './dto/register.response.dto';
 
 import { AuthMapper } from './auth.mapper';
 
-import { EmailAlreadyExistsError, RoleNotFoundError } from './auth.errors';
-
 import { Roles } from '../../common/constants/roles';
 
 import { withTransaction } from '../../common/database/transaction';
+import { ConflictException } from '../../common/exceptions/conflict.exception';
+import { NotFoundException } from '../../common/exceptions/not-found.exception';
 
 @injectable()
 export class AuthService {
@@ -41,7 +41,7 @@ export class AuthService {
     const existingUser = await this.userRepository.findByEmail(dto.email);
 
     if (existingUser) {
-      throw new EmailAlreadyExistsError();
+      throw new ConflictException('Email already exists');
     }
 
     const passwordHash = await this.passwordService.hash(dto.password);
@@ -62,7 +62,7 @@ export class AuthService {
       const role = await this.roleRepository.findByName(Roles.USER);
 
       if (!role) {
-        throw new RoleNotFoundError();
+        throw new NotFoundException('Role not found');
       }
 
       await this.userRoleRepository.assignRole(user.id, role.id, {

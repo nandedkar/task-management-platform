@@ -1,7 +1,9 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import { inject, injectable } from 'tsyringe';
 import { AuthService } from './auth.service';
 import { TOKENS } from '../../container/tokens';
+import { successResponse } from '../../common/responses/success-response';
+import { asyncHandler } from '../../common/utils/async-handler';
 
 @injectable()
 export class AuthController {
@@ -10,15 +12,8 @@ export class AuthController {
     private readonly authService: AuthService,
   ) {}
 
-  register = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const result = await this.authService.register(req.body);
-      return res.status(201).json({
-        success: true,
-        data: result,
-      });
-    } catch (error) {
-      next(error);
-    }
-  };
+  register = asyncHandler(async (req: Request, res: Response) => {
+    const result = await this.authService.register(req.body);
+    return successResponse(res, 201, 'User registered successfully', result);
+  });
 }

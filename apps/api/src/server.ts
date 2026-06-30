@@ -5,6 +5,7 @@ import app from './app';
 import { sequelize } from './config/database';
 import { redisClient } from './config/redis';
 import { env } from './config/env';
+import { printBanner } from './common/startup/banner';
 
 async function bootstrap() {
   await sequelize.authenticate();
@@ -12,7 +13,7 @@ async function bootstrap() {
   await redisClient.connect();
   console.log('Redis connected successfully.');
   app.listen(env.port, () => {
-    console.log(`Server is running on port ${env.port}`);
+    printBanner();
   });
 }
 

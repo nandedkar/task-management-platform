@@ -3,6 +3,7 @@ import { existsSync } from 'fs';
 import { redisConfig } from './redis.config';
 import { databaseConfig } from './database.config';
 import { appConfig } from './app.config';
+import { envSchema } from './env.schema';
 
 dotenv.config();
 
@@ -37,3 +38,5 @@ export const env = {
   redisHost: resolveHost(redisConfig.host),
   redisPort: Number(redisConfig.port),
 };
+
+envSchema.parse(process.env);

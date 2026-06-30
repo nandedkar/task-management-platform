@@ -1,5 +1,6 @@
 import { Response, Request } from 'express';
 import { AppException } from '../exceptions/app.exception';
+import { HttpStatus } from '../constants/http-status';
 
 // type ErrorWithStatus = {
 //   statusCode?: number;
@@ -16,21 +17,10 @@ export const errorHandler = (err: unknown, req: Request, res: Response) => {
     });
   }
 
-  return res.status(500).json({
+  return res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
     success: false,
     message: 'Internal Server Error',
     timestamp: new Date().toISOString(),
     path: req.originalUrl,
   });
-
-  // if (res.headersSent) {
-  //   return next(err as Error);
-  // }
-
-  // const error = err as ErrorWithStatus;
-
-  // res.status(error.statusCode || 500).json({
-  //   success: false,
-  //   message: error.message || "Internal Server Error",
-  // });
 };

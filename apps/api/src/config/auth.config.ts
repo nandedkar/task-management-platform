@@ -1,13 +1,14 @@
 import 'dotenv/config';
+import { envSchema } from './env.schema';
+
+const validatedEnv = envSchema.parse(process.env);
 
 export const authConfig = {
-  accessSecret: process.env.JWT_ACCESS_SECRET!,
+  accessSecret: validatedEnv.JWT_ACCESS_SECRET,
 
-  refreshSecret: process.env.JWT_REFRESH_SECRET!,
+  refreshSecret: validatedEnv.JWT_REFRESH_SECRET,
 
-  accessExpiry:
-    process.env.ACCESS_TOKEN_EXPIRES ?? '15m',
+  accessExpiry: validatedEnv.ACCESS_TOKEN_EXPIRES,
 
-  refreshExpiry:
-    process.env.REFRESH_TOKEN_EXPIRES ?? '7d',
+  refreshExpiry: validatedEnv.REFRESH_TOKEN_EXPIRES,
 };

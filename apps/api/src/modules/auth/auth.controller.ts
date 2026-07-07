@@ -5,6 +5,7 @@ import { TOKENS } from '../../container/tokens';
 import { successResponse } from '../../common/responses/success-response';
 import { asyncHandler } from '../../common/utils/async-handler';
 import { HttpStatus } from '../../common/constants/http-status';
+import { UnauthorizedException } from '../../common/exceptions/unauthorized.exception';
 
 @injectable()
 export class AuthController {
@@ -24,6 +25,23 @@ export class AuthController {
       res,
       HttpStatus.OK,
       'User logged in successfully',
+      result,
+    );
+  });
+
+  getCurrentUser = asyncHandler(async (req: Request, res: Response) => {
+    const userId = req.auth?.userId;
+
+    if (!userId) {
+      throw new UnauthorizedException('Unauthorized');
+    }
+
+    const result = await this.authService.getCurrentUser(userId);
+
+    return successResponse(
+      res,
+      HttpStatus.OK,
+      'User retrieved successfully',
       result,
     );
   });

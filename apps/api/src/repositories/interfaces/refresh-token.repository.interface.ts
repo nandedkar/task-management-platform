@@ -15,6 +15,7 @@ export interface IRefreshTokenRepository extends IBaseRepository<RefreshToken> {
   ): Promise<RefreshToken>;
 
   findBySessionId(sessionId: string): Promise<RefreshToken | null>;
+  findActiveSession(sessionId: string): Promise<RefreshToken | null>;
 
   revokeSession(sessionId: string, options?: CreateOptions): Promise<void>;
 

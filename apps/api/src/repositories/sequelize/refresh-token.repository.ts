@@ -75,6 +75,15 @@ export class RefreshTokenRepository
     });
   }
 
+  async findActiveSession(sessionId: string): Promise<RefreshToken | null> {
+    return this.findOne({
+      where: {
+        sessionId,
+        revokedAt: null,
+      },
+    });
+  }
+
   async revokeSession(
     sessionId: string,
     options?: RepositoryOptions,

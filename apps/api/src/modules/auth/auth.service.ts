@@ -98,13 +98,13 @@ export class AuthService {
     );
     //step 2: Load the user's roles
     const userRoles = await this.userRoleRepository.findUserRoles(user.id);
-    user.roles = userRoles.map((role) => role.dataValues.roleName);
+    const roles = userRoles.map((role) => role.dataValues.roleName);
 
     // Step 3: Generate Tokens
     const { sessionId, accessToken, refreshToken, refreshTokenHash } =
       await this.tokenService.generateAccessToken({
         id: user.id,
-        roles: user.roles,
+        roles,
       });
 
     await this.sessionService.createSession(user.id, {
@@ -114,5 +114,24 @@ export class AuthService {
     });
 
     return AuthMapper.toLoginResponse(user, accessToken, refreshToken);
+  }
+
+  async getCurrentUser(userId: string) {
+    const user = await this.userRepository.findById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    const userRoles = await this.userRoleRepository.findUserRoles(user.id);
+    const roles = userRoles.map((role) => role.dataValues.roleName);
+
+    return {
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      roles,
+    };
   }
 }

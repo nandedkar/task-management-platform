@@ -1,11 +1,10 @@
 export interface AccessTokenPayload {
   sub: string;
-  email: string;
-  sessionId: string;
+  sid: string;
   roles: string[];
 }
 
 export interface RefreshTokenPayload {
   sub: string;
-  sessionId: string;
+  sid: string;
 }

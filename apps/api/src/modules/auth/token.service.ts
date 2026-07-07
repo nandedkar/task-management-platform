@@ -15,7 +15,6 @@ export class TokenService {
 
   async generateAccessToken(user: {
     id: string;
-    email: string;
     roles: string[];
   }) {
     //create a session id for the user
@@ -23,14 +22,13 @@ export class TokenService {
 
     const accessToken = this.jwtService.signAccessToken({
       sub: user.id,
-      email: user.email,
-      sessionId: sessionId,
+      sid: sessionId,
       roles: user.roles,
     });
     
     const refreshToken = this.jwtService.signRefreshToken({
       sub: user.id,
-      sessionId: sessionId,
+      sid: sessionId,
     });
 
     const refreshTokenHash = this.tokenHashService.hash(refreshToken);

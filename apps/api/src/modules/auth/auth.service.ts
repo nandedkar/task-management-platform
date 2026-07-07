@@ -104,7 +104,6 @@ export class AuthService {
     const { sessionId, accessToken, refreshToken, refreshTokenHash } =
       await this.tokenService.generateAccessToken({
         id: user.id,
-        email: user.email,
         roles: user.roles,
       });
 
@@ -114,16 +113,6 @@ export class AuthService {
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
     });
 
-    return {
-      user: {
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        roles: user.roles,
-      },
-      accessToken,
-      refreshToken,
-    };
+    return AuthMapper.toLoginResponse(user, accessToken, refreshToken);
   }
 }

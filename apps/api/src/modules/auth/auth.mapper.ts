@@ -1,5 +1,8 @@
 import { User } from '../user/user.model';
-import { RegisterResponseDto } from './dto/register.response.dto';
+import {
+  LoginResponseDto,
+  RegisterResponseDto,
+} from './dto/register.response.dto';
 
 /**
  * AuthMapper is responsible for transforming User entities into
@@ -11,6 +14,24 @@ export class AuthMapper {
       id: user.id,
       email: user.email,
       fullName: `${user.firstName} ${user.lastName}`,
+    };
+  }
+
+  static toLoginResponse(
+    user: User,
+    accessToken: string,
+    refreshToken: string,
+  ): LoginResponseDto {
+    return {
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        roles: 'roles' in user ? (user as { roles: string[] }).roles : [],
+      },
+      accessToken,
+      refreshToken,
     };
   }
 }

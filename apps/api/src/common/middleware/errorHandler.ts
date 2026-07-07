@@ -2,11 +2,6 @@ import { Response, Request } from 'express';
 import { AppException } from '../exceptions/app.exception';
 import { HttpStatus } from '../constants/http-status';
 
-// type ErrorWithStatus = {
-//   statusCode?: number;
-//   message?: string;
-// };
-
 export const errorHandler = (err: unknown, req: Request, res: Response) => {
   if (err instanceof AppException) {
     return res.status(err.statusCode).json({

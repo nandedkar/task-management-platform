@@ -1,7 +1,8 @@
+import { HttpStatus } from '../constants/http-status';
 import { AppException } from './app.exception';
 
 export class ConflictException extends AppException {
   constructor(message: string) {
-    super(409, message);
+    super(HttpStatus.CONFLICT, message);
   }
 }

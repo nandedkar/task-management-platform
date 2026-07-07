@@ -14,6 +14,7 @@ export class RefreshToken extends Model<
 > {
   declare id: CreationOptional<string>;
   declare userId: string;
+  declare sessionId: string;
   declare tokenHash: string;
   declare deviceName: string;
   declare ipAddress: string;
@@ -21,6 +22,7 @@ export class RefreshToken extends Model<
   declare expiresAt: Date;
   declare revokedAt: Date | null;
   declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 }
 
 RefreshToken.init(
@@ -34,6 +36,11 @@ RefreshToken.init(
     userId: {
       type: DataTypes.UUID,
       field: 'user_id',
+    },
+
+    sessionId: {
+      type: DataTypes.UUID,
+      field: 'session_id',
     },
 
     tokenHash: {
@@ -69,6 +76,10 @@ RefreshToken.init(
     createdAt: {
       type: DataTypes.DATE,
       field: 'created_at',
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      field: 'updated_at',
     },
   },
   {

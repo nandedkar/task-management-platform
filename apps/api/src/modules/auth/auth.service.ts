@@ -20,6 +20,11 @@ import { Roles } from '../../common/constants/roles';
 import { withTransaction } from '../../common/database/transaction';
 import { ConflictException } from '../../common/exceptions/conflict.exception';
 import { NotFoundException } from '../../common/exceptions/not-found.exception';
+import { CredentialService } from './credential.service';
+import { LoginRequestDto } from './dto/login.request.dto';
+import { TokenService } from './token.service';
+import { SessionService } from './session.service';
+import { TokenHashService } from '../../common/security/hash/token-hash.service';
 
 @injectable()
 export class AuthService {
@@ -35,6 +40,18 @@ export class AuthService {
 
     @inject(TOKENS.PasswordService)
     private readonly passwordService: PasswordService,
+
+    @inject(TOKENS.CredentialService)
+    private readonly credentialService: CredentialService,
+
+    @inject(TOKENS.SessionService)
+    private readonly sessionService: SessionService,
+
+    @inject(TOKENS.TokenService)
+    private readonly tokenService: TokenService,
+
+    @inject(TOKENS.TokenHashService)
+    private readonly tokenHashService: TokenHashService,
   ) {}
 
   async register(dto: RegisterRequestDto): Promise<RegisterResponseDto> {
@@ -71,5 +88,42 @@ export class AuthService {
 
       return AuthMapper.toRegisterResponse(user);
     });
+  }
+
+  async login(dto: LoginRequestDto) {
+    //Step 1: Verify the user's credentials (email and password)
+    const user = await this.credentialService.verifyCredentials(
+      dto.email,
+      dto.password,
+    );
+    //step 2: Load the user's roles
+    const userRoles = await this.userRoleRepository.findUserRoles(user.id);
+    user.roles = userRoles.map((role) => role.dataValues.roleName);
+
+    // Step 3: Generate Tokens
+    const { sessionId, accessToken, refreshToken, refreshTokenHash } =
+      await this.tokenService.generateAccessToken({
+        id: user.id,
+        email: user.email,
+        roles: user.roles,
+      });
+
+    await this.sessionService.createSession(user.id, {
+      sessionId,
+      refreshTokenHash,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days
+    });
+
+    return {
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        roles: user.roles,
+      },
+      accessToken,
+      refreshToken,
+    };
   }
 }

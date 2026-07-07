@@ -7,4 +7,8 @@ export const TOKENS = {
   JwtService: Symbol('JwtService'),
   RefreshTokenRepository: Symbol('RefreshTokenRepository'),
   UserRoleRepository: Symbol('UserRoleRepository'),
+  CredentialService: Symbol('CredentialService'),
+  TokenHashService: Symbol('TokenHashService'),
+  SessionService: Symbol('SessionService'),
+  TokenService: Symbol('TokenService'),
 } as const;
